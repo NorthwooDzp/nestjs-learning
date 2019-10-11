@@ -55,6 +55,7 @@ export class TasksService {
     }
 
     public updateTaskStatus(id: string, status: TaskStatus): Task {
+        console.log(status);
         const task: Task = this.getTaskById(id);
         task.status = status;
         return task;

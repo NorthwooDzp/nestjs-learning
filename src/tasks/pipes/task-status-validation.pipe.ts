@@ -4,7 +4,12 @@ import { TaskStatus } from '../task.model';
 @Injectable()
 export class TaskStatusValidationPipe implements PipeTransform {
   public transform(value: string) {
+    if (!value) {
+      throw new BadRequestException('Status is required parameter');
+    }
+
     value = value.toLowerCase();
+
     if (!this.validateStatus(value)) {
       throw new BadRequestException(`Status ${value} is invalid`);
     }
