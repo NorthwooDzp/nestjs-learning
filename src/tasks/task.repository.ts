@@ -13,8 +13,15 @@ export class TaskRepository extends Repository<Task> {
         task.title = title;
         task.description = description;
         task.status = TaskStatus.OPEN;
-        await task.save();
-        return task;
+        return this.save(task);
+    }
+
+    public async getTaskById(id: number): Promise<Task> | undefined {
+        return this.findOne(id);
+    }
+
+    public async removeTask(task: Task): Promise<Task> {
+        return this.remove(task);
     }
 
 }

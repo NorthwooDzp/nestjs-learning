@@ -1,6 +1,5 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { TaskStatus } from './task-status.enum';
-import { CreateTaskDto } from './dto/create-task.dto';
 
 @Entity()
 export class Task extends BaseEntity {
