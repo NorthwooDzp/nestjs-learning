@@ -7,6 +7,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     username: 'dbadmin',
     password: 'dbadmin',
     database: 'nestlearning',
-    entities: [__dirname + '/../**/*.entity.js'],
+    entities: [__dirname + '/../**/*.entity{.js,.ts}'],
     synchronize: true,
 };
