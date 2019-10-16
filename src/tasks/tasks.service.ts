@@ -5,10 +5,18 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TaskRepository } from './task.repository';
 import { Task } from './task.entity';
+import { TaskStatus } from './task-status.enum';
 
 @Injectable()
 export class TasksService {
-    constructor(@InjectRepository(TaskRepository) private taskRepository: TaskRepository) {
+    constructor(
+        @InjectRepository(TaskRepository)
+        private taskRepository: TaskRepository,
+    ) {
+    }
+
+    public async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
+        return [];
     }
 
     public async getTaskById(id: number): Promise<Task> {
@@ -19,40 +27,17 @@ export class TasksService {
         return found;
     }
 
-    /*public getAllTasks(): Task[] {
-        return this.tasks;
-    }*/
-
-    /* public getTasksWithFilters(filterDto: GetTasksFilterDto): Task[] {
-         const {search, status} = filterDto;
-
-         let tasks = this.getAllTasks();
-
-         if (status) {
-             tasks = tasks.filter(item => item.status === status);
-         }
-         if (search) {
-             tasks = tasks.filter(item =>
-                 item.description.includes(search) ||
-                 item.title.includes(search));
-         }
-
-         return tasks;
-     }*/
-
-    public createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+    public async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
         return this.taskRepository.createTask(createTaskDto);
     }
 
-    /*public updateTaskStatus(id: string, status: TaskStatus): Task {
-        console.log(status);
-        const task: Task = this.getTaskById(id);
-        task.status = status;
-        return task;
-    }*/
+    public async updateTaskStatus(id: number, status: TaskStatus): Promise<Task> {
+        const task = await this.getTaskById(id);
+        return this.taskRepository.updateTaskStatus(task, status);
+    }
 
     public async deleteTask(id: number): Promise<Task> {
-        const found = await this.getTaskById(id);
-        return this.taskRepository.removeTask(found);
+        const task = await this.getTaskById(id);
+        return this.taskRepository.removeTask(task);
     }
 }
