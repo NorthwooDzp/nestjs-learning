@@ -10,10 +10,11 @@ export class UserRepository extends Repository<User> {
     public async signUp(authDto: AuthCredentialsDto): Promise<void> {
         const { password, username } = authDto;
 
+        const salt = await bcrypt.genSalt();
+
         const user = new User();
         user.username = username;
-        user.salt = await bcrypt.genSalt();
-        user.password = await this.hashPassword(password, user.salt);
+        user.password = await this.hashPassword(password, salt);
 
         try {
             await this.save(user);
@@ -23,6 +24,17 @@ export class UserRepository extends Repository<User> {
             } else {
                 throw new InternalServerErrorException();
             }
+        }
+    }
+
+    public async signIn(authDto: AuthCredentialsDto): Promise<string> {
+        const { password, username } = authDto;
+        const user = await this.findOne({ username });
+
+        if (user && await user.validatePassword(password)) {
+            return 'true';
+        } else {
+            return 'false';
         }
     }
 
