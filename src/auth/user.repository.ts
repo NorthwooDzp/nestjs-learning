@@ -12,9 +12,7 @@ export class UserRepository extends Repository<User> {
 
         const salt = await bcrypt.genSalt();
 
-        const user = new User();
-        user.username = username;
-        user.password = await this.hashPassword(password, salt);
+        const user = new User(username, await this.hashPassword(password, salt));
 
         try {
             await this.save(user);
@@ -32,13 +30,13 @@ export class UserRepository extends Repository<User> {
         const user = await this.findOne({ username });
 
         if (user && await user.validatePassword(password)) {
-            return 'true';
+            return 'true logged in';
         } else {
-            return 'false';
+            return 'incorrect credentials';
         }
     }
 
-    private async hashPassword(password: string, salt: string): Promise<string> {
+    protected async hashPassword(password: string, salt: string): Promise<string> {
         return bcrypt.hash(password, salt);
     }
 }

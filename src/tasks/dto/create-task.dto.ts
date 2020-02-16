@@ -1,7 +1,6 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, MinLength } from 'class-validator';
 
 export class CreateTaskDto {
     @IsNotEmpty() public title: string;
-
     @IsNotEmpty() public description: string;
 }

@@ -30,10 +30,7 @@ export class TaskRepository extends Repository<Task> {
 
     public async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
         const {description, title} = createTaskDto;
-        const task = new Task();
-        task.title = title;
-        task.description = description;
-        task.status = TaskStatus.OPEN;
+        const task = new Task(title, description);
         return this.save(task);
     }
 
